@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         String apiKey = "85709eec804fd0f1065b210fa3dc2548";
-        double latitude = 37.8267;
+        double latitude =  37.8267;
         double longitude = -122.423;
         String forecastURL = "https://api.forecast.io/forecast/" + apiKey + "/" + latitude + "," + longitude;
 
@@ -56,8 +56,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Response response) throws IOException {
                 try {
+                    Log.e(TAG, response.body().string());
                     if (response.isSuccessful()){
-                        Log.e(TAG, response.body().string());
+
+                    }
+                    else {
+                        alertUserAboutError();
                     }
                 } catch (IOException e) {
                     Log.e(TAG, "Exception caught: ", e);
@@ -65,6 +69,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void alertUserAboutError() {
+        AlertDialogFragment dialog = new AlertDialogFragment();
+        dialog.show(getFragmentManager(), "error_dialog");
     }
 
     @Override
