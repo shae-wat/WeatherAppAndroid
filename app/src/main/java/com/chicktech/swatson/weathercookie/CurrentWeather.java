@@ -1,5 +1,9 @@
 package com.chicktech.swatson.weathercookie;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 /**
  * Created by swatson on 1/10/16.
  */
@@ -9,6 +13,15 @@ public class CurrentWeather {
     private double mTemperature;
     private double mHumidity;
     private double mPrecipChance;
+    private String mTimeZone;
+
+    public String getTimeZone() {
+        return mTimeZone;
+    }
+
+    public void setTimeZone(String timeZone) {
+        mTimeZone = timeZone;
+    }
 
     public String getSummary() {
         return summary;
@@ -28,6 +41,14 @@ public class CurrentWeather {
 
     public long getTime() {
         return mTime;
+    }
+
+    public String getFormattedTime(){
+        SimpleDateFormat formatter = new SimpleDateFormat("h:mm a");
+        formatter.setTimeZone(TimeZone.getTimeZone(mTimeZone));
+        Date dateTime = new Date(mTime * 1000 );
+        String timeString = formatter.format(dateTime);
+        return timeString;
     }
 
     public void setTime(long time) {
