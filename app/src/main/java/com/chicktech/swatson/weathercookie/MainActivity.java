@@ -42,10 +42,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mIconImageView = (ImageView)findViewById(R.id.icon);
         mTemperatureTextView = (TextView)findViewById(R.id.temperature);
         mLocationTextView = (TextView)findViewById(R.id.location);
         mHumidityTextView = (TextView)findViewById(R.id.humidity);
         mPrecipitationTextView = (TextView)findViewById(R.id.precip_chance);
+        mSummaryTextView = (TextView)findViewById(R.id.summary);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -163,11 +165,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void populateViews(CurrentWeather currentWeather) {
-        Log.e(TAG, "HEYEHEYHEYEHYE"+""+currentWeather.getTemperature());
-        //mIconImageView.setImageResource(currentWeather.getIconResId());
+        mIconImageView.setImageResource(currentWeather.getIconResId());
         mTemperatureTextView.setText(""+currentWeather.getTemperature());
         mHumidityTextView.setText(""+currentWeather.getHumidity());
         mPrecipitationTextView.setText(""+currentWeather.getPrecipChance());
-//        mSummaryTextView.setText(currentWeather.getSummary());
+        mSummaryTextView.setText(currentWeather.getSummary());
     }
 }

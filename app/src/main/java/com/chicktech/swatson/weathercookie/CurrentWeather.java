@@ -99,8 +99,16 @@ public class CurrentWeather {
         mTemperature = temperature;
     }
 
+    public String getFormattedTemperature() {
+        return "" + ((int) mTemperature) + "\u00B0";
+    }
+
     public double getHumidity() {
         return mHumidity;
+    }
+
+    public String getFormattedHumidity() {
+        return "" + (int) (mHumidity * 100) + "%";
     }
 
     public void setHumidity(double humidity) {
