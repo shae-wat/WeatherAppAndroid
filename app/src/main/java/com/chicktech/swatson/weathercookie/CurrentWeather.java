@@ -119,6 +119,10 @@ public class CurrentWeather {
         return mPrecipChance;
     }
 
+    public String getFormattedPrecipChance() {
+        return "" + (int) (mPrecipChance * 100) + "%";
+    }
+
     public void setPrecipChance(double precipChance) {
         mPrecipChance = precipChance;
     }

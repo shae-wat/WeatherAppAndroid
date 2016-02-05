@@ -13,14 +13,16 @@
     tools:context="com.chicktech.swatson.weathercookie.MainActivity"
     tools:showIn="@layout/activity_main">
 
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
     <TextView
         android:id="@+id/location"
         android:text="Portland, Oregon"
+        android:layout_toRightOf="@id/icon"
         android:textSize="24sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <ImageView
-        android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <TextView
