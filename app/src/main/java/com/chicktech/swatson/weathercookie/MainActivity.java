@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -29,11 +31,21 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
     private CurrentWeather mCurrentWeather;
+    private ImageView mIconImageView;
+    private TextView mTemperatureTextView;
+    private TextView mLocationTextView;
+    private TextView mHumidityTextView;
+    private TextView mPrecipitationTextView;
+    private TextView mSummaryTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mTemperatureTextView = (TextView)findViewById(R.id.temperature);
+        mLocationTextView = (TextView)findViewById(R.id.location);
+        mHumidityTextView = (TextView)findViewById(R.id.humidity);
+        mPrecipitationTextView = (TextView)findViewById(R.id.precip_chance);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -69,6 +81,13 @@ public class MainActivity extends AppCompatActivity {
                         Log.e(TAG, jsonData);
                         if (response.isSuccessful()) {
                             mCurrentWeather = getCurrentDetails(jsonData);
+                            runOnUiThread(new Runnable() {
+                                  @Override
+                                  public void run() {
+                                      populateViews(mCurrentWeather);
+                                  }
+                              }
+                            );
                         } else {
                             alertUserAboutError();
                         }
@@ -140,5 +159,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void populateViews(CurrentWeather currentWeather) {
+        Log.e(TAG, "HEYEHEYHEYEHYE"+""+currentWeather.getTemperature());
+        //mIconImageView.setImageResource(currentWeather.getIconResId());
+        mTemperatureTextView.setText(""+currentWeather.getTemperature());
+        mHumidityTextView.setText(""+currentWeather.getHumidity());
+        mPrecipitationTextView.setText(""+currentWeather.getPrecipChance());
+//        mSummaryTextView.setText(currentWeather.getSummary());
     }
 }
