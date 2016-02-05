@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -29,11 +31,23 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
     private CurrentWeather mCurrentWeather;
+    private ImageView mIconImageView;
+    private TextView mTemperatureTextView;
+    private TextView mLocationTextView;
+    private TextView mHumidityTextView;
+    private TextView mPrecipitationTextView;
+    private TextView mSummaryTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mIconImageView = (ImageView)findViewById(R.id.icon);
+        mTemperatureTextView = (TextView)findViewById(R.id.temperature);
+        mLocationTextView = (TextView)findViewById(R.id.location);
+        mHumidityTextView = (TextView)findViewById(R.id.humidity);
+        mPrecipitationTextView = (TextView)findViewById(R.id.precip_chance);
+        mSummaryTextView = (TextView)findViewById(R.id.summary);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -59,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
-
+                    Log.e(TAG, "Failed to get weather data");
                 }
 
                 @Override
@@ -69,6 +83,13 @@ public class MainActivity extends AppCompatActivity {
                         Log.e(TAG, jsonData);
                         if (response.isSuccessful()) {
                             mCurrentWeather = getCurrentDetails(jsonData);
+                            runOnUiThread(new Runnable() {
+                                  @Override
+                                  public void run() {
+                                      populateViews(mCurrentWeather);
+                                  }
+                              }
+                            );
                         } else {
                             alertUserAboutError();
                         }
@@ -95,13 +116,13 @@ public class MainActivity extends AppCompatActivity {
         JSONObject currently = forecast.getJSONObject("currently");
 
         CurrentWeather currentWeather = new CurrentWeather();
-        currentWeather.setHumidity(currently.getDouble("humidity"));
-        currentWeather.setTime(currently.getLong("time"));
-        currentWeather.setIcon(currently.getString("icon"));
-        currentWeather.setPrecipChance(currently.getDouble("precipProbability"));
-        currentWeather.setSummary(currently.getString("summary"));
-        currentWeather.setTemperature(currently.getDouble("temperature"));
-        currentWeather.setTimeZone(timezone);
+
+        currentWeather.setHumidity(currently.optDouble("humidity"));
+        currentWeather.setTime(currently.optLong("time"));
+        currentWeather.setIcon(currently.optString("icon"));
+        currentWeather.setPrecipChance(currently.optDouble("precipProbability"));
+        currentWeather.setSummary(currently.optString("summary"));
+        currentWeather.setTemperature(currently.optDouble("temperature"));
 
         return currentWeather;
     }
@@ -141,5 +162,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void populateViews(CurrentWeather currentWeather) {
+        mIconImageView.setImageResource(currentWeather.getIconResId());
+        mTemperatureTextView.setText(""+currentWeather.getFormattedTemperature());
+        mHumidityTextView.setText(""+currentWeather.getFormattedHumidity());
+        mPrecipitationTextView.setText(""+currentWeather.getFormattedPrecipChance());
+        mSummaryTextView.setText(currentWeather.getSummary());
     }
 }
