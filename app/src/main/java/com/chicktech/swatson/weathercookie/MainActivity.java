@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
-
+                    Log.e(TAG, "Failed to get weather data");
                 }
 
                 @Override
@@ -95,12 +95,12 @@ public class MainActivity extends AppCompatActivity {
         JSONObject currently = forecast.getJSONObject("currently");
 
         CurrentWeather currentWeather = new CurrentWeather();
-        currentWeather.setHumidity(currently.getDouble("humidity"));
-        currentWeather.setTime(currently.getLong("time"));
-        currentWeather.setIcon(currently.getString("icon"));
-        currentWeather.setPrecipChance(currently.getDouble("precipProbability"));
-        currentWeather.setSummary(currently.getString("summary"));
-        currentWeather.setTemperature(currently.getDouble("temperature"));
+        currentWeather.setHumidity(currently.optDouble("humidity"));
+        currentWeather.setTime(currently.optLong("time"));
+        currentWeather.setIcon(currently.optString("icon"));
+        currentWeather.setPrecipChance(currently.optDouble("precipProbability"));
+        currentWeather.setSummary(currently.optString("summary"));
+        currentWeather.setTemperature(currently.optDouble("temperature"));
 
         return currentWeather;
     }
